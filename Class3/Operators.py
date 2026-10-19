@@ -1,0 +1,25 @@
+# print(7 + 3)
+# print(7 - 3)
+# print(7 * 3)
+# print(7 / 3)
+# print(7 // 3)
+# print(7 % 3)
+# print(7 ** 3)
+
+# print(type(7 + 3))
+# print(type(7 - 3))
+# print(type(7 * 3))
+# print(type(7 / 3))
+# print(type(7 // 3))
+# print(type(7 % 3))
+# print(type(7 ** 3))
+
+
+# Typecasting (explicit conversion)
+# print(7 + 3.0)
+# print(type(7 + 3.0))
+
+# #Typecasting (implicit conversion)
+# print(int(3.14) )
+# print(float(7/3))
+# print(int(True))
