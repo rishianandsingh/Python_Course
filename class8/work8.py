@@ -103,7 +103,19 @@
 
 
 # ? Prime or not
-n = int(input())
-i = 2
-while i*i <= n and n%i != 0:
-    i = i+1
+# n = int(input())
+# if n<2:
+#     print("not prime")
+# else:
+#     i = 2
+#     is_prime = True
+#     while i*i <= n:
+#         if n%i == 0:
+#             is_prime = False
+#             break
+#         i = i+1
+# if is_prime:
+#     print("prime")
+# else:
+#     print("not prime")
+
