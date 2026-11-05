@@ -17,6 +17,7 @@
 
 # ? GCD
 
+#! self
 # a = int(input())
 # b = int(input())
 # i = 1
@@ -93,16 +94,154 @@
 # ans = n//a + n//b - (n//lcm)
 # print(ans)
 
-a = int(input())
-b = int(input())
-dividend = max(a, b)
-divisor = min(a, b)
-if a == 0 or b == 0:
-    gcd = max(a,b)
-else:
-    while dividend%divisor != 0:
-        rem = dividend % divisor
-        divisor = rem
-        dividend = divisor
-    gcd = divisor
-print(gcd)
+
+#? Euclidean algo (gcd)
+
+# a = int(input())
+# b = int(input())
+# dividend = max(a, b)
+# divisor = min(a, b)
+# if a == 0 or b == 0:
+#     gcd = max(a,b)
+# else:
+#     while dividend%divisor != 0:
+#         rem = dividend % divisor
+#         divisor = rem
+#         dividend = divisor
+#     gcd = divisor
+# print(gcd)
+
+
+
+# ! GCD of n numbers
+# n = int(input())
+# a = list(map(int, input().split()))
+# g = a[0]
+# i = 1
+# while i < n:
+#     x = g
+#     y = a[i]
+#     while y != 0:
+#         x, y = y, x % y
+#     g = x
+#     i = i + 1
+# print(g)
+
+
+
+
+# ? pattern 1
+# n = 5
+# i = 1
+# while i <= n:
+#     j = 1
+#     while j <= i:
+#         print(j, end=" ")
+#         j += 1
+#     print()
+#     i += 1
+
+
+
+# ? pattern 2
+# n = int(input())
+# i = 1
+# spaces = n+2
+# while i <= n:
+#     j = 1
+#     print(" "*spaces, end=" ")
+#     while j <= i:
+#         print(j, end=" ")
+#         j += 1
+#     print()
+#     spaces -= 2
+#     i += 1
+
+
+# ? pattern 3
+# n = int(input())
+# i = 1
+# spaces = n+2
+# while i <= n:
+#     j = i
+#     print(" "*spaces, end=" ")
+#     while j >= 1:
+#         print(j, end=" ")
+#         j -= 1
+#     print()
+#     spaces -= 2
+#     i += 1
+
+
+# ? pattern 4
+# n = int(input())
+# i = 1
+# while i <= n:
+#     print("  "*(n-i), end="")
+#     j = 1
+#     while j <= i:
+#         print(j, end=" ")
+#         j += 1
+#     j = i-1
+#     while j > 0:
+#         print(j, end=" ")
+#         j -= 1
+#     print()
+#     i += 1
+
+
+
+#? star patten
+
+# n = int(input())
+# i = 1
+# while i <= n:
+#     j = 1
+#     while j <=n-i:
+#         print(" ", end=" ")
+#         j += 1
+#     j = 1
+#     while j <= i:
+#         print("*", end=" ")
+#         j += 1
+#     j = i-1
+#     while j > 0:
+#         print("*", end=" ")
+#         j -= 1
+#     print()
+#     i += 1
+
+
+
+# n = int(input())
+# i = 1
+# while i <= n:
+#     j = 1
+#     while j <=n-i:
+#         print(" ", end=" ")
+#         j += 1
+#     j = 1
+#     while j <= 2*i-1:
+#         print("*", end=" ")
+#         j += 1
+#     print()
+    # i += 1
+
+
+
+
+
+# n = int(input())
+# i = 1
+# while i <= n:
+#     print("  "*(n-i), end="")
+#     print("* "*(2*i-1))
+#     i += 1
+
+
+
+
+# ? pattern 5
+# n = int(input())
+# i = 1
+# while i <= 
