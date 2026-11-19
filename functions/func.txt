@@ -1,0 +1,1344 @@
+# F1 -FUNCTIONS – PART 1
+# WS 20: FUNCTIONS – PACK THE LOGIC IN A BOX
+
+============================================================
+PART 1: WHY DO WE NEED FUNCTIONS?
+============================================================
+
+1. INTRODUCTION TO FUNCTIONS
+
+Abhi tak humne Python mein variables, conditions, loops, lists, strings aur mathematical problems solve kiye hain.
+
+Generally hum apna code directly likhte hain:
+
+price = 500
+tax = price * 18 / 100
+total = price + tax
+
+print(total)
+
+Ab imagine karo ki ek shop mein 100 customers hain aur har customer ke liye same billing calculation karni hai.
+
+Kya hum har customer ke liye same 3-4 lines baar-baar likhenge?
+
+Nahi!
+
+Yahi problem solve karne ke liye FUNCTIONS use hote hain.
+
+Function ek reusable block of code hota hai jo kisi particular task ko perform karta hai.
+
+Ek baar function define kar do aur jab bhi uski zarurat ho, usse call kar sakte ho.
+
+Real-life example:
+
+ATM machine mein withdrawal ka ek fixed process hota hai.
+
+1. Account check karna.
+2. Balance check karna.
+3. Amount deduct karna.
+4. Cash dispense karna.
+
+Ye process ek baar design hota hai, lekin multiple transactions mein reuse hota hai.
+
+Programming mein bhi hum aise hi reusable logic create karte hain.
+
+------------------------------------------------------------
+2. CODE REPETITION PROBLEM
+------------------------------------------------------------
+
+Suppose humein 3 customers ka final bill calculate karna hai, jismein 18% tax add hota hai.
+
+Code:
+
+price1 = 500
+tax1 = price1 * 18 / 100
+total1 = price1 + tax1
+print("Customer 1 pays:", total1)
+
+price2 = 1200
+tax2 = price2 * 18 / 100
+total2 = price2 + tax2
+print("Customer 2 pays:", total2)
+
+price3 = 750
+tax3 = price3 * 18 / 100
+total3 = price3 + tax3
+print("Customer 3 pays:", total3)
+
+Output:
+
+Customer 1 pays: 590.0
+Customer 2 pays: 1416.0
+Customer 3 pays: 885.0
+
+Problem kya hai?
+
+1. Same calculation baar-baar likhni pad rahi hai.
+2. Code unnecessarily lengthy ho raha hai.
+3. Agar tax rate change hua, toh multiple places par changes karne padenge.
+4. Agar ek jagah change karna bhool gaye, toh program inconsistent ho jayega.
+
+Is problem ko CODE DUPLICATION kehte hain.
+
+------------------------------------------------------------
+3. CAN A LOOP SOLVE THIS PROBLEM?
+------------------------------------------------------------
+
+Haan!
+
+Agar same calculation consecutive lines mein repeat ho rahi hai aur different prices ke liye perform karni hai, toh loop use kar sakte hain.
+
+Example:
+
+for price in [500, 1200, 750]:
+
+    tax = price * 18 / 100
+    total = price + tax
+
+    print("Pays:", total)
+
+Yahan loop ne repetition remove kar di.
+
+Lekin ek important question hai.
+
+Kya har type ki repetition ko loop se solve kar sakte hain?
+
+Nahi!
+
+Consider karo ki humein 3 different tasks mein prime number checking ka logic use karna hai:
+
+1. 10 se 30 ke beech prime numbers print karna.
+2. User ke diye hue number ko prime check karna.
+3. User ke number ke baad next prime number find karna.
+
+Teeno tasks mein prime checking ka logic same hai, lekin teeno different places aur different loop structures ke andar hain.
+
+Ek single loop in teeno jagah ke logic ko combine nahi kar sakta.
+
+Yahan FUNCTION ki zarurat hoti hai.
+
+------------------------------------------------------------
+4. DRY PRINCIPLE
+------------------------------------------------------------
+
+DRY ka full form hai:
+
+DON'T REPEAT YOURSELF
+
+Meaning:
+
+Ek particular logic ko baar-baar alag-alag places par likhne ke bajaye uska ek single source of truth hona chahiye.
+
+Benefits:
+
+1. Code duplication reduce hota hai.
+2. Code maintain karna easy hota hai.
+3. Changes ek hi place par karne padte hain.
+4. Bugs ke chances kam hote hain.
+5. Code reusable aur readable banta hai.
+
+IMPORTANT DIFFERENCE:
+
+LOOP:
+Same lines ko ek hi place par repeatedly execute karta hai.
+
+FUNCTION:
+Logic ko ek naam deta hai, jisse program ke different places se call kar sakte hain.
+
+============================================================
+PART 2: FUNCTIONS YOU HAVE ALREADY USED
+============================================================
+
+5. BUILT-IN FUNCTIONS
+
+Python mein already bahut saare functions available hote hain.
+
+Humne inhe pehle bhi use kiya hai.
+
+Examples:
+
+A) len()
+
+String ya collection ki length return karta hai.
+
+print(len("hello"))
+
+Output:
+5
+
+B) int()
+
+Value ko integer mein convert karta hai.
+
+x = int("25")
+
+print(x)
+
+Output:
+25
+
+C) input()
+
+User se input leta hai aur string return karta hai.
+
+name = input("Enter name: ")
+
+D) range()
+
+Numbers ki sequence generate karta hai.
+
+for i in range(1, 5):
+    print(i)
+
+E) max()
+
+Maximum value return karta hai.
+
+print(max(10, 20, 5))
+
+Output:
+20
+
+F) sorted()
+
+Iterable ka sorted version ek new list ke form mein return karta hai.
+
+print(sorted([5, 2, 9, 1]))
+
+Output:
+[1, 2, 5, 9]
+
+G) ord()
+
+Character ka Unicode code point return karta hai.
+
+print(ord('A'))
+
+Output:
+65
+
+IMPORTANT:
+
+In sabhi functions ke andar ka implementation humein nahi pata hona zaroori.
+
+Humein bas pata hona chahiye:
+
+1. Function ko kya input dena hai.
+2. Function kya output return karega.
+3. Function ko kaise call karna hai.
+
+Function ke input-output rules ko uska INTERFACE kehte hain.
+
+============================================================
+PART 3: CREATING OUR OWN FUNCTION
+============================================================
+
+6. def KEYWORD
+
+Python mein apna function create karne ke liye def keyword use hota hai.
+
+Syntax:
+
+def function_name():
+    statements
+
+Example:
+
+def greet():
+    print("Hello Students")
+
+Explanation:
+
+def:
+Python ko batata hai ki hum ek function define kar rahe hain.
+
+greet:
+Function ka naam hai.
+
+(): 
+Parentheses function ke parameters ke liye hote hain. Abhi koi parameter nahi hai.
+
+:
+Function body start hone ka indication hai.
+
+Indented statements:
+Function ke andar execute hone wala code.
+
+IMPORTANT:
+
+Sirf function define karne se function body execute nahi hoti.
+
+Example:
+
+def greet():
+    print("Hello")
+
+Output:
+Kuch bhi print nahi hoga.
+
+Kyun?
+
+Kyunki function abhi sirf define hua hai. Use call nahi kiya gaya.
+
+------------------------------------------------------------
+7. FUNCTION CALLING
+------------------------------------------------------------
+
+Function ko execute karne ke liye function call karna padta hai.
+
+Example:
+
+def greet():
+    print("Hello Students")
+
+greet()
+
+Output:
+
+Hello Students
+
+Explanation:
+
+1. Python def line execute karta hai.
+2. Function object create hota hai.
+3. greet naam us function object ko refer karta hai.
+4. Jab greet() likhte hain, function call hota hai.
+5. Function body execute hoti hai.
+
+Ek function ko multiple times call kar sakte hain.
+
+Example:
+
+def greet():
+    print("Hello")
+
+greet()
+greet()
+greet()
+
+Output:
+
+Hello
+Hello
+Hello
+
+Yahi reusability ka benefit hai.
+
+------------------------------------------------------------
+8. FUNCTION WITH PARAMETERS
+------------------------------------------------------------
+
+Abhi tak humne aisa function banaya jismein koi input nahi tha.
+
+Lekin practical programming mein humein functions ko different inputs dene hote hain.
+
+Example:
+
+def greet(name):
+    print("Hello", name)
+
+greet("Rahul")
+greet("Aman")
+greet("Priya")
+
+Output:
+
+Hello Rahul
+Hello Aman
+Hello Priya
+
+Explanation:
+
+name function ka PARAMETER hai.
+
+"Rahul", "Aman" aur "Priya" function ko pass kiye gaye ARGUMENTS hain.
+
+PARAMETER:
+Function definition mein likha gaya variable.
+
+ARGUMENT:
+Function call ke time pass ki gayi actual value.
+
+Example:
+
+def square(n):
+    print(n * n)
+
+square(5)
+
+Yahan:
+
+n = Parameter
+5 = Argument
+
+Output:
+25
+
+------------------------------------------------------------
+9. FUNCTION WITH MULTIPLE PARAMETERS
+------------------------------------------------------------
+
+Ek function mein multiple parameters bhi ho sakte hain.
+
+Example:
+
+def add(a, b):
+    print(a + b)
+
+add(10, 20)
+
+Output:
+30
+
+Explanation:
+
+Function definition:
+
+def add(a, b):
+
+Do parameters hain: a aur b.
+
+Function call:
+
+add(10, 20)
+
+Arguments:
+
+10 aur 20.
+
+Python positional matching use karta hai.
+
+a = 10
+b = 20
+
+Then:
+
+print(a + b)
+
+Output:
+30
+
+IMPORTANT:
+
+Arguments left-to-right parameters ko assign hote hain.
+
+Example:
+
+def power(a, b):
+    print(a ** b)
+
+power(2, 5)
+power(5, 2)
+
+Output:
+
+32
+25
+
+Order change karne se result change ho gaya.
+
+------------------------------------------------------------
+10. REWRITING BILLING PROGRAM USING FUNCTION
+------------------------------------------------------------
+
+Pehle humne same billing logic 3 baar likha tha.
+
+Ab function use karte hain.
+
+Code:
+
+def final_price(price):
+
+    tax = price * 12 / 100
+
+    return price + tax + 10
+
+
+print(final_price(500))
+print(final_price(1000))
+print(final_price(2000))
+
+Explanation:
+
+Function:
+
+def final_price(price):
+
+price ek parameter hai.
+
+tax = price * 12 / 100
+
+12% tax calculate hoga.
+
+return:
+
+Final amount caller ko wapas bhej dega.
+
+Call:
+
+final_price(500)
+
+500 argument hai.
+
+Calculation:
+
+Tax = 500 * 12 / 100 = 60
+
+Final price = 500 + 60 + 10 = 570
+
+Output:
+570.0
+
+IMPORTANT:
+
+Ab tax rate ya calculation change karni ho toh sirf function ke andar change karna padega.
+
+============================================================
+PART 4: RETURN STATEMENT
+============================================================
+
+11. RETURN KYA HOTA HAI?
+
+return statement function se result caller ko wapas bhejne ke liye use hota hai.
+
+Example:
+
+def add(a, b):
+
+    result = a + b
+
+    return result
+
+
+ans = add(10, 20)
+
+print(ans)
+
+Output:
+
+30
+
+Execution:
+
+1. add(10, 20) call hua.
+2. a = 10 aur b = 20.
+3. result = 30.
+4. return result se 30 caller ko wapas mil gaya.
+5. ans = 30 ho gaya.
+6. print(ans) ne 30 print kar diya.
+
+IMPORTANT:
+
+return ke baad function immediately terminate ho jata hai.
+
+Example:
+
+def demo():
+
+    print("Start")
+
+    return 100
+
+    print("End")
+
+x = demo()
+print(x)
+
+Output:
+
+Start
+100
+
+"End" print nahi hoga kyunki return ke baad function execution stop ho chuka hai.
+
+------------------------------------------------------------
+12. PRINT VS RETURN
+------------------------------------------------------------
+
+Ye functions ka sabse important concept hai.
+
+PRINT:
+
+Output screen par display karta hai.
+
+RETURN:
+
+Value ko function ke caller ke paas bhejta hai, jise program further use kar sakta hai.
+
+Example 1:
+
+def add(a, b):
+
+    print(a + b)
+
+
+x = add(10, 20)
+
+print("x =", x)
+
+Output:
+
+30
+x = None
+
+Kyun?
+
+Kyunki function ne answer print kiya, return nahi kiya.
+
+Python automatically None return karta hai jab function mein explicit return nahi hota.
+
+Example 2:
+
+def add(a, b):
+
+    return a + b
+
+
+x = add(10, 20)
+
+print("x =", x)
+
+Output:
+
+x = 30
+
+Difference:
+
+First function:
+Answer screen par print kiya, lekin caller ko result nahi diya.
+
+Second function:
+Answer caller ko return kiya, jise variable mein store kar sakte hain.
+
+IMPORTANT:
+
+Har function jo explicit return nahi karta, woh None return karta hai.
+
+------------------------------------------------------------
+13. RETURNING DIFFERENT VALUES
+------------------------------------------------------------
+
+Example:
+
+def check_even(n):
+
+    if n % 2 == 0:
+        return True
+
+    else:
+        return False
+
+
+result = check_even(10)
+
+print(result)
+
+Output:
+True
+
+Is function ko aur simple likh sakte hain:
+
+def check_even(n):
+    return n % 2 == 0
+
+Explanation:
+
+n % 2 == 0 ka result already Boolean hota hai.
+
+Isliye directly return kar sakte hain.
+
+------------------------------------------------------------
+14. EARLY RETURN
+------------------------------------------------------------
+
+Early return ka matlab hai condition satisfy hote hi function se result return kar dena.
+
+Example: Prime Number Checker
+
+def is_prime(n):
+
+    if n < 2:
+        return False
+
+    i = 2
+
+    while i * i <= n:
+
+        if n % i == 0:
+            return False
+
+        i += 1
+
+    return True
+
+
+print(is_prime(7))
+print(is_prime(10))
+print(is_prime(1))
+
+Output:
+
+True
+False
+False
+
+Explanation:
+
+Step 1:
+
+Agar n < 2 hai, toh immediately False return.
+
+Step 2:
+
+i = 2 se divisors check karna start.
+
+Step 3:
+
+Agar n kisi i se completely divisible hai, toh prime nahi hai.
+
+Immediately False return.
+
+Step 4:
+
+Agar loop complete ho gaya aur koi divisor nahi mila, toh True return.
+
+IMPORTANT:
+
+return sirf loop ko nahi, poore function ko terminate karta hai.
+
+Comparison:
+
+break:
+Sirf current loop terminate karta hai.
+
+return:
+Poore function ko terminate karta hai.
+
+Flag approach aur early return dono valid techniques hain.
+
+------------------------------------------------------------
+15. FUNCTION CALLING INSIDE ANOTHER FUNCTION
+------------------------------------------------------------
+
+Ek function ke andar doosra function call kar sakte hain.
+
+Example:
+
+def square(n):
+    return n * n
+
+
+def cube(n):
+    return square(n) * n
+
+
+print(cube(3))
+
+Output:
+27
+
+Execution:
+
+cube(3)
+
+square(3) = 9
+
+9 * 3 = 27
+
+Isse code modular aur reusable banta hai.
+
+============================================================
+PART 5: FUNCTION AS AN OBJECT
+============================================================
+
+16. FUNCTION IS ALSO AN OBJECT
+
+Python mein functions bhi objects hote hain.
+
+Jab Python def statement execute karta hai:
+
+1. Function object create hota hai.
+2. Function ke instructions us object mein store hote hain.
+3. Function ka naam us object se bind ho jata hai.
+
+Example:
+
+def greet():
+    print("Hello")
+
+
+print(type(greet))
+
+Output:
+
+<class 'function'>
+
+Matlab greet ek function object hai.
+
+------------------------------------------------------------
+17. FUNCTION NAME VS FUNCTION CALL
+------------------------------------------------------------
+
+Ye dono statements different hain.
+
+greet
+
+greet()
+
+greet:
+Function object ko refer karta hai.
+
+greet():
+Function ko call karta hai.
+
+Example:
+
+def greet():
+    print("Hello")
+
+
+x = greet
+
+x()
+
+Output:
+
+Hello
+
+Explanation:
+
+x = greet
+
+Yahan function call nahi hua.
+
+Bas same function object ko x naam se refer kar diya.
+
+Ab:
+
+x()
+
+Function call ho gaya.
+
+------------------------------------------------------------
+18. ALIASING OF FUNCTION
+------------------------------------------------------------
+
+Ek function object ko multiple names assign kar sakte hain.
+
+Example:
+
+def greet():
+    print("Hello")
+
+
+a = greet
+b = greet
+
+print(a is b)
+print(greet is a)
+
+Output:
+
+True
+True
+
+Explanation:
+
+Teeno names same function object ko refer kar rahe hain.
+
+IMPORTANT:
+
+g = greet
+
+Function object ka reference assign karta hai.
+
+g = greet()
+
+Function ko execute karta hai aur uske returned result ko g mein store karta hai.
+
+------------------------------------------------------------
+19. FUNCTION INSIDE A LIST
+------------------------------------------------------------
+
+Kyunki function ek object hai, hum use list ke andar bhi store kar sakte hain.
+
+Example:
+
+def square(n):
+    return n * n
+
+
+def cube(n):
+    return n * n * n
+
+
+toolbox = [square, cube, len]
+
+print(toolbox[0](5))
+print(toolbox[1](3))
+print(toolbox[2]("Python"))
+
+Output:
+
+25
+27
+6
+
+Explanation:
+
+toolbox[0] square function object hai.
+
+toolbox[0](5) se square function call hoga.
+
+Similarly toolbox[1] cube ko refer karta hai.
+
+Yahi concept callbacks aur higher-order functions mein useful hota hai.
+
+------------------------------------------------------------
+20. FUNCTION CALL BEFORE DEFINITION
+------------------------------------------------------------
+
+Example:
+
+greet()
+
+def greet():
+    print("Hello")
+
+Output:
+
+NameError
+
+Reason:
+
+Jab greet() execute hua, tabhi greet naam define nahi hua tha.
+
+Python code ko top to bottom execute karta hai.
+
+Function object tabhi available hota hai jab interpreter def statement tak pahunchta hai.
+
+============================================================
+PART 6: ONE FUNCTION – MULTIPLE DATA TYPES
+============================================================
+
+21. PYTHON'S DYNAMIC TYPING
+
+Python mein function parameters ka type pehle se declare karna necessary nahi hota.
+
+Example:
+
+def times(a, b):
+    return a * b
+
+
+print(times(2, 4))
+print(times("Ni", 4))
+print(times([1, 2], 3))
+
+Output:
+
+8
+NiNiNiNi
+[1, 2, 1, 2, 1, 2]
+
+Explanation:
+
+First call:
+
+2 * 4 = 8
+
+Second call:
+
+"Ni" * 4 = "NiNiNiNi"
+
+Third call:
+
+[1, 2] * 3 = [1, 2, 1, 2, 1, 2]
+
+Same function, different data types.
+
+Kyun?
+
+Python function definition mein humne type specify nahi kiya.
+
+Jo objects arguments ke form mein aaye, unke supported operations ke according function execute hua.
+
+------------------------------------------------------------
+22. OPERATION-BASED THINKING
+------------------------------------------------------------
+
+Python ka focus sirf data type par nahi, balki supported operations par bhi hota hai.
+
+Example:
+
+def multiply(a, b):
+    return a * b
+
+Ye function un values ke saath work karega jinke liye * operation supported hai.
+
+Lekin:
+
+multiply("Ni", "Ni")
+
+Error:
+
+TypeError
+
+Kyunki string ko string se multiply karna supported nahi hai.
+
+IMPORTANT:
+
+Python mein incorrect type combination ka error function definition ke time zaroori nahi aata.
+
+Error tab aata hai jab problematic call execute hota hai.
+
+Is philosophy ko commonly DUCK TYPING kehte hain.
+
+Simple meaning:
+
+If an object supports the operations required by your code, it can be used.
+
+Comparison:
+
+Statically typed language:
+"What type is this variable?"
+
+Python:
+"Does this object support the operation I need?"
+
+============================================================
+PART 7: HOW ARGUMENTS TRAVEL
+============================================================
+
+23. ARGUMENT PASSING IN PYTHON
+
+Example:
+
+def double(x):
+
+    x = x * 2
+
+    print("Inside:", x)
+
+
+n = 7
+
+double(n)
+
+print("Outside:", n)
+
+Output:
+
+Inside: 14
+Outside: 7
+
+Question:
+
+Function ke andar x ki value 14 ho gayi, lekin n ki value 7 hi kyun hai?
+
+Explanation:
+
+Function call ke time:
+
+x = n
+
+Initially dono names same integer object 7 ko refer karte hain.
+
+But:
+
+x = x * 2
+
+Is operation se 14 ka new integer object create hota hai.
+
+Ab local name x new object ko refer karta hai.
+
+Original name n ab bhi 7 ko refer kar raha hai.
+
+Isliye:
+
+Inside = 14
+Outside = 7
+
+IMPORTANT CONCEPT:
+
+Python mein arguments pass by assignment hote hain.
+
+Function ke parameter ko argument wale object ka reference milta hai.
+
+Parameter ek local name hota hai.
+
+Reassignment of local name automatically caller ke variable ko change nahi karta.
+
+NOTE:
+
+Mutable objects jaise lists ka behaviour next class mein detail mein samjhenge.
+
+============================================================
+PART 8: LAMBDA FUNCTIONS
+============================================================
+
+24. LAMBDA KYA HOTA HAI?
+
+Lambda Python mein small anonymous function create karne ka short syntax hai.
+
+Anonymous ka matlab: function ka koi explicitly defined naam nahi hota.
+
+Normal function:
+
+def square(n):
+    return n * n
+
+
+print(square(5))
+
+Lambda equivalent:
+
+square = lambda n: n * n
+
+print(square(5))
+
+Output:
+
+25
+
+Syntax:
+
+lambda parameters: expression
+
+Explanation:
+
+lambda:
+Anonymous function create karta hai.
+
+n:
+Parameter.
+
+n * n:
+Expression jiska result automatically return hota hai.
+
+IMPORTANT DIFFERENCES:
+
+Normal def:
+Multiple statements likh sakte hain.
+Function ko meaningful naam de sakte hain.
+Complex logic ke liye useful.
+
+Lambda:
+Single expression allowed hota hai.
+Explicit return statement nahi likhte.
+Expression ka result automatically return hota hai.
+Small temporary functions ke liye useful.
+
+------------------------------------------------------------
+25. LAMBDA WITH MULTIPLE PARAMETERS
+------------------------------------------------------------
+
+Example:
+
+add = lambda a, b: a + b
+
+print(add(10, 20))
+
+Output:
+30
+
+Example:
+
+power = lambda a, b: a ** b
+
+print(power(2, 5))
+
+Output:
+32
+
+Example:
+
+maximum = lambda a, b: a if a > b else b
+
+print(maximum(10, 20))
+
+Output:
+20
+
+------------------------------------------------------------
+26. LAMBDA WITH SORTED()
+------------------------------------------------------------
+
+Humne sorted() function pehle use kiya hai.
+
+Example:
+
+words = ["banana", "fig", "apple"]
+
+print(sorted(words, key=len))
+
+Output:
+
+['fig', 'apple', 'banana']
+
+Explanation:
+
+key=len ka matlab:
+
+Python har word ki length calculate karega aur length ke basis par sorting karega.
+
+banana = 6
+fig = 3
+apple = 5
+
+Sorted lengths:
+
+3, 5, 6
+
+Output:
+
+['fig', 'apple', 'banana']
+
+Ab lambda ke saath:
+
+words = ["banana", "fig", "apple"]
+
+result = sorted(words, key=lambda w: len(w))
+
+print(result)
+
+Output:
+
+['fig', 'apple', 'banana']
+
+Explanation:
+
+lambda w: len(w)
+
+Har word ko input lega aur uski length return karega.
+
+sorted() function har element ke liye key function call karta hai.
+
+Returned values ke basis par original elements sort hote hain.
+
+IMPORTANT:
+
+Function ko argument ke form mein pass kar sakte hain because functions are objects.
+
+------------------------------------------------------------
+27. DEF VS LAMBDA
+------------------------------------------------------------
+
+Normal function:
+
+def last_char(word):
+    return word[-1]
+
+
+words = ["apple", "banana", "fig"]
+
+print(sorted(words, key=last_char))
+
+Lambda:
+
+words = ["apple", "banana", "fig"]
+
+print(sorted(words, key=lambda w: w[-1]))
+
+Output:
+
+['banana', 'apple', 'fig']
+
+Dono ka purpose same hai.
+
+Use def when:
+- Logic complex ho.
+- Multiple statements hon.
+- Function reuse karna ho.
+- Meaningful function name chahiye.
+
+Use lambda when:
+- Logic very small ho.
+- Single expression ho.
+- Temporary function chahiye.
+
+============================================================
+PART 9: COMPLETE PRACTICE QUESTIONS
+============================================================
+
+BASIC LEVEL
+
+Q1. Create a function that prints Hello World.
+
+Q2. Create a function that takes a name and prints a greeting.
+
+Q3. Create a function that takes two numbers and returns their sum.
+
+Q4. Create a function that returns the square of a number.
+
+Q5. Create a function that checks whether a number is even or odd.
+
+Q6. Create a function that returns the greatest of two numbers.
+
+INTERMEDIATE LEVEL
+
+Q7. Create a function to calculate simple interest.
+
+Q8. Create a function to calculate factorial.
+
+Q9. Create a function to check prime numbers using early return.
+
+Q10. Create a function that returns the sum of digits.
+
+Q11. Create a function that reverses a number.
+
+Q12. Create a function that checks palindrome numbers.
+
+Q13. Create a function that accepts a list and returns its maximum value.
+
+LAMBDA PRACTICE
+
+Q14. Create a lambda function to calculate square.
+
+Q15. Create a lambda function to add two numbers.
+
+Q16. Sort a list of strings according to their length using lambda.
+
+Q17. Sort words according to their last character using lambda.
+
+============================================================
+PART 10: IMPORTANT REVISION
+============================================================
+
+1. Function = Reusable block of code.
+
+2. def = Function define karne ke liye.
+
+3. Function definition execute hone par function object create hota hai.
+
+4. Function call = Function execute karna.
+
+5. Parameter = Definition mein variable.
+
+6. Argument = Function call mein actual value.
+
+7. return = Result caller ko wapas bhejna.
+
+8. print = Result screen par display karna.
+
+9. No explicit return = None.
+
+10. return = Function immediately terminate.
+
+11. Function is an object.
+
+12. Function object ko list mein store kar sakte hain.
+
+13. Multiple names same function object ko refer kar sakte hain.
+
+14. Python uses dynamic typing.
+
+15. Python arguments are passed by assignment.
+
+16. Lambda = Small anonymous function.
+
+17. sorted(key=...) = Sorting ke liye custom function provide karna.
+
+18. DRY = Don't Repeat Yourself.
+
+END OF FUNCTIONS – PART 1

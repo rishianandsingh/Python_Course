@@ -106,8 +106,8 @@
 # else:
 #     while dividend%divisor != 0:
 #         rem = dividend % divisor
-#         divisor = rem
 #         dividend = divisor
+#         divisor = rem
 #     gcd = divisor
 # print(gcd)
 
