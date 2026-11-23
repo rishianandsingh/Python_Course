@@ -245,3 +245,38 @@
 # n = int(input())
 # i = 1
 # while i <= 
+
+
+
+
+#? snake pattern
+# n = int(input())
+# for i in range(1, n+1):
+#     ans = []
+#     j = n*(i-1)+1
+#     while j<= n*i:
+#         if i%2 == 1:
+#             ans.append(j)
+#         else:
+#             ans.append((n*(i-1)) + n*i-(j-1))
+#         j += 1
+#     print(*ans)
+
+
+# n = int(input())
+# i = 1
+# x = 0
+# while i <= n:
+#     x += 1
+#     j = x
+#     ans = []
+#     while j <= n*i:
+#         ans.append(j)
+#         j += 1
+#     x += n-1
+#     if i%2 == 1:
+#         print(*ans)
+#     else:
+#         ans.reverse()
+#         print(*ans)
+#     i += 1

@@ -1,0 +1,2089 @@
+CLASS 10 — DATA WRANGLING
+Topic: Lists, Matrices, 3-D Arrays, Dictionaries
+Rule: Use while loops only. No for loops, no map(), no list comprehensions.
+
+
+PART 1 — SCANNING INPUT INTO A 1-D LIST
+============================================================
+
+1. LIST KYA HOTI HAI?
+
+
+List ek container hai jisme hum multiple values store kar sakte hain.
+Example: agar humein 5 students ke marks store karne hain, toh alag-alag variables banane ke bajaye ek list bana sakte hain.
+
+Example:
+marks = [70, 80, 90, 60, 85]
+
+Indexing zero se start hoti hai:
+marks[0] = 70
+marks[1] = 80
+marks[2] = 90
+
+Yaad rakho: agar list mein n elements hain, toh last valid index n-1 hota hai.
+
+2. INPUT SHAPE A — PEHLE COUNT, PHIR HAR NUMBER ALAG LINE
+
+Input:
+5
+10
+20
+30
+40
+50
+
+Code:
+n = int(input())
+arr = []
+
+i = 0
+while i < n:
+    arr.append(int(input()))
+    i += 1
+
+print(arr)
+
+Output:
+[10, 20, 30, 40, 50]
+
+LINE-BY-LINE EXPLANATION:
+
+n = int(input())
+Pehli line se pata chalta hai kitne numbers aayenge.
+
+arr = []
+Ek empty list banayi.
+
+i = 0
+Counter zero se start kiya.
+
+while i < n:
+Jab tak i, n se chhota hai, loop chalega.
+
+arr.append(int(input()))
+Ek number read kiya, int() se integer banaya aur append() se list mein add kiya.
+
+i += 1
+Counter ek badha diya.
+
+ASK STUDENTS:
+Agar i += 1 hata dein toh kya hoga?
+ANSWER:
+i zero hi rahega, condition true rahegi aur loop baar-baar chalta rahega. Infinite loop ho sakta hai.
+
+3. INPUT SHAPE B — SAARE NUMBERS EK HI LINE MEIN
+
+Input:
+10 20 30 40 50
+
+Code:
+parts = input().split()
+arr = []
+
+i = 0
+while i < len(parts):
+    arr.append(int(parts[i]))
+    i += 1
+
+print(arr)
+
+Output:
+[10, 20, 30, 40, 50]
+
+EXPLANATION:
+
+input() poori line ko string ke roop mein read karta hai.
+split() spaces par line ko tod kar strings ki list banata hai.
+
+"10 20 30" -> ["10", "20", "30"]
+
+Dhyan do: ye abhi strings hain, integers nahi.
+Isliye int(parts[i]) use karte hain.
+
+len(parts) list mein pieces ki count batata hai.
+parts[i] ek particular piece access karta hai.
+append() converted integer ko arr mein add karta hai.
+
+4. SUM AUR MAXIMUM INPUT READ KARTE WAQT NIKALNA
+
+Code:
+n = int(input())
+
+total = 0
+biggest = None
+
+i = 0
+while i < n:
+    x = int(input())
+
+    total += x
+
+    if biggest is None or x > biggest:
+        biggest = x
+
+    i += 1
+
+print(total, biggest)
+
+Input:
+5
+10
+20
+30
+40
+50
+
+Output:
+150 50
+
+EXPLANATION:
+
+total = 0
+Abhi tak sum zero hai.
+
+biggest = None
+Abhi tak koi number dekha nahi, isliye maximum initialize nahi hua.
+
+x = int(input())
+Current number read karo.
+
+total += x
+Current number ko total mein add karo.
+
+if biggest is None or x > biggest:
+Agar pehla number hai ya current number ab tak ke maximum se bada hai, toh biggest update karo.
+
+IMPORTANT BUG:
+biggest = 0 se start karna galat ho sakta hai.
+Agar numbers -8, -3, -10 hon, toh maximum -3 hai. Zero se start karoge toh galat answer 0 aa sakta hai.
+Isliye None se start karo ya first input ko initial maximum banao.
+
+============================================================
+SECTION A — TRACE THE SCAN
+============================================================
+
+A1 — LIST SCANNING
+
+Code:
+n = int(input())
+arr = []
+
+i = 0
+while i < n:
+    arr.append(int(input()))
+    i += 1
+
+print(len(arr), arr[0], arr[n-1])
+
+Input:
+4
+7
+7
+2
+9
+
+Dry run:
+arr = [7, 7, 2, 9]
+len(arr) = 4
+arr[0] = 7
+arr[n-1] = arr[3] = 9
+
+Output:
+4 7 9
+
+
+A2 — MATRIX INDEXING
+
+Code:
+m = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+print(m[1])
+print(m[1][2])
+print(len(m), len(m[0]))
+
+Output:
+[4, 5, 6]
+6
+3 3
+
+Explanation:
+m[1] second row hai.
+m[1][2] second row ka third element hai, jo 6 hai.
+len(m) rows ki count deta hai.
+len(m[0]) first row mein columns ki count deta hai.
+
+A3 — COLUMN-WISE TRAVERSAL
+
+Code:
+j = 0
+while j < 3:
+    i = 0
+    while i < 3:
+        print(m[i][j], end=" ")
+        i += 1
+    j += 1
+
+Output:
+1 4 7 2 5 8 3 6 9
+
+Ye column-wise traversal hai.
+Outer loop column j ko change karta hai. Inner loop us column ki saari rows visit karta hai.
+
+============================================================
+PART 2 — 2-D MATRICES
+============================================================
+
+1. MATRIX KYA HOTI HAI?
+
+
+Agar data rows aur columns mein arranged ho, jaise spreadsheet ya marksheet, toh hum matrix jaisi structure use karte hain.
+
+Python mein separate built-in matrix type ki zaroorat nahi. Hum list ke andar lists rakhte hain. Isliye ise list of lists kehte hain.
+
+Example:
+m = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+
+m[0] -> [1, 2, 3] (first row)
+m[1] -> [4, 5, 6] (second row)
+m[1][2] -> 6 (second row, third column)
+len(m) -> 3 rows
+len(m[0]) -> 3 columns
+
+First index row batata hai. Second index column batata hai.
+
+2. MATRIX INPUT LENA
+
+Input:
+3 3
+1 2 3
+4 5 6
+7 8 9
+
+Code:
+first = input().split()
+R = int(first[0])
+C = int(first[1])
+
+m = []
+i = 0
+
+while i < R:
+    parts = input().split()
+    row = []
+    j = 0
+
+    while j < C:
+        row.append(int(parts[j]))
+        j += 1
+
+    m.append(row)
+    i += 1
+
+print(m)
+
+Output:
+[[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+EXPLANATION:
+R rows ki count hai.
+C columns ki count hai.
+m = [] empty matrix hai.
+Outer while loop har row banata hai.
+Har row ke liye row = [] banate hain.
+Inner while loop C numbers read karke row mein add karta hai.
+Jab row complete ho jaati hai, m.append(row) se matrix mein add karte hain.
+
+IMPORTANT:
+j = 0 ko outer loop ke andar likhna zaroori hai, taaki har new row ke liye column counter reset ho.
+
+3. ROW-WISE TRAVERSAL
+
+Code:
+i = 0
+while i < R:
+    j = 0
+    while j < C:
+        print(m[i][j], end=" ")
+        j += 1
+    i += 1
+
+Output:
+1 2 3 4 5 6 7 8 9
+
+Outer loop rows par chalta hai.
+Inner loop current row ke columns par chalta hai.
+
+4. COLUMN-WISE TRAVERSAL
+
+Code:
+j = 0
+while j < C:
+    i = 0
+    while i < R:
+        print(m[i][j], end=" ")
+        i += 1
+    j += 1
+
+Output:
+1 4 7 2 5 8 3 6 9
+
+Outer loop columns par chalta hai.
+Inner loop current column ki rows par chalta hai.
+
+GOLDEN RULE:
+Row-wise: outer i (rows), inner j (columns).
+Column-wise: outer j (columns), inner i (rows).
+Loop order badalne se traversal order badal jaata hai.
+
+5. B4 — MATRIX TOTAL
+
+Code:
+total = 0
+i = 0
+
+while i < R:
+    j = 0
+    while j < C:
+        total += m[i][j]
+        j += 1
+    i += 1
+
+print(total)
+
+Output:
+45
+
+Explanation:
+Har cell par jao aur total mein add karte jao.
+
+6. B5 — ROW SUMS AUR COLUMN SUMS
+
+Row sums:
+i = 0
+while i < R:
+    s = 0
+    j = 0
+
+    while j < C:
+        s += m[i][j]
+        j += 1
+
+    print(s, end=" ")
+    i += 1
+
+print()
+
+Column sums:
+j = 0
+while j < C:
+    s = 0
+    i = 0
+
+    while i < R:
+        s += m[i][j]
+        i += 1
+
+    print(s, end=" ")
+    j += 1
+
+print()
+
+Output:
+6 15 24
+12 15 18
+
+Row sums:
+1+2+3 = 6
+4+5+6 = 15
+7+8+9 = 24
+
+Column sums:
+1+4+7 = 12
+2+5+8 = 15
+3+6+9 = 18
+
+7. B6 — DIAGONAL SUMS
+
+Square matrix:
+1 2 3
+4 5 6
+7 8 9
+
+Main diagonal: 1, 5, 9
+Anti-diagonal: 3, 5, 7
+
+Code:
+i = 0
+main = 0
+anti = 0
+
+while i < R:
+    main += m[i][i]
+    anti += m[i][R - 1 - i]
+    i += 1
+
+print(main, anti)
+
+Output:
+15 15
+
+Explanation:
+m[i][i] main diagonal ka cell hai.
+m[i][N-1-i] anti-diagonal ka cell hai.
+Yahan R ko N ki jagah use kar sakte hain kyunki matrix square hai.
+
+============================================================
+PART 3 — FANCY MATRIX TRAVERSALS
+============================================================
+
+B7 — TRANSPOSE
+
+1 2 3
+4 5 6
+7 8 9
+
+Transpose:
+1 4 7
+2 5 8
+3 6 9
+
+Code:
+t = []
+j = 0
+
+while j < C:
+    row = []
+    i = 0
+
+    while i < R:
+        row.append(m[i][j])
+        i += 1
+
+    t.append(row)
+    j += 1
+
+i = 0
+while i < len(t):
+    j = 0
+    while j < len(t[i]):
+        print(t[i][j], end=" ")
+        j += 1
+    print()
+    i += 1
+
+Output:
+1 4 7
+2 5 8
+3 6 9
+
+Explanation:
+Original matrix ke har column ko new row bana rahe hain.
+Rectangular matrix ka transpose C rows aur R columns ka hoga.
+
+B8 — DIAGONAL TRAVERSAL
+
+Original matrix:
+1 2 3
+4 5 6
+7 8 9
+
+Anti-diagonals:
+d=0: 1
+d=1: 2, 4
+d=2: 3, 5, 7
+d=3: 6, 8
+d=4: 9
+
+Ek anti-diagonal ke cells ke liye i+j same hota hai.
+Agar d = i+j, toh j = d-i.
+
+Code:
+d = 0
+while d <= R + C - 2:
+    i = 0
+
+    while i < R:
+        j = d - i
+
+        if 0 <= j < C:
+            print(m[i][j], end=" ")
+
+        i += 1
+
+    d += 1
+
+Output:
+1 2 4 3 5 7 6 8 9
+
+Explanation:
+d har anti-diagonal ko represent karta hai.
+i rows par chalta hai.
+j = d-i se column calculate karte hain.
+Bounds check 0 <= j < C ensure karta hai ki column valid hai.
+
+B9 — DIAGONAL ZIGZAG TRAVERSAL
+
+Output:
+1 2 4 7 5 3 6 8 9
+
+Same anti-diagonals use karni hain, lekin alternate diagonal ki direction reverse karni hai.
+
+Code:
+d = 0
+
+while d <= R + C - 2:
+
+    if d % 2 == 0:
+        i = d if d < R else R - 1
+
+        while i >= 0:
+            j = d - i
+
+            if 0 <= j < C:
+                print(m[i][j], end=" ")
+
+            i -= 1
+
+    else:
+        i = 0 if d <= C - 1 else d - (C - 1)
+
+        while i < R:
+            j = d - i
+
+            if 0 <= j < C:
+                print(m[i][j], end=" ")
+
+            i += 1
+
+    d += 1
+
+Output:
+1 2 4 7 5 3 6 8 9
+
+Explanation:
+d % 2 == 0 check karta hai ki d even hai ya nahi.
+Even aur odd diagonals ke liye traversal direction alternate hoti hai.
+Students ko pehle diagonals paper par trace karwao, phir code samjhao.
+
+B10 — SPIRAL TRAVERSAL
+
+
+Order:
+1. Top row: left se right.
+2. Right column: top se bottom.
+3. Bottom row: right se left.
+4. Left column: bottom se top.
+Phir boundaries ko andar move karo aur repeat karo.
+
+Code:
+top = 0
+bottom = R - 1
+left = 0
+right = C - 1
+
+while top <= bottom and left <= right:
+
+    j = left
+    while j <= right:
+        print(m[top][j], end=" ")
+        j += 1
+    top += 1
+
+    i = top
+    while i <= bottom:
+        print(m[i][right], end=" ")
+        i += 1
+    right -= 1
+
+    if top <= bottom:
+        j = right
+        while j >= left:
+            print(m[bottom][j], end=" ")
+            j -= 1
+        bottom -= 1
+
+    if left <= right:
+        i = bottom
+        while i >= top:
+            print(m[i][left], end=" ")
+            i -= 1
+        left += 1
+
+Output:
+1 2 3 6 9 8 7 4 5
+
+BOUNDARIES:
+top = current top row
+bottom = current bottom row
+left = current left column
+right = current right column
+
+Har side complete karne ke baad boundary andar move hoti hai.
+if conditions important hain, kyunki last mein ek hi row ya column bach sakta hai. Conditions duplicate printing se bachati hain.
+
+============================================================
+PART 4 — 3-D ARRAYS
+============================================================
+
+B11 — CUBE SUM
+
+
+Example:
+cube = [
+    [[1, 2], [3, 4]],
+    [[5, 6], [7, 8]]
+]
+
+cube[0] -> first grid
+cube[1] -> second grid
+cube[1][0] -> [5, 6]
+cube[1][0][1] -> 6
+
+Input:
+2 2 2
+1 2
+3 4
+5 6
+7 8
+
+First line A B C batati hai:
+A = number of layers
+B = rows per layer
+C = columns per row
+
+COMPLETE CODE:
+dims = input().split()
+
+A = int(dims[0])
+B = int(dims[1])
+C = int(dims[2])
+
+cube = []
+a = 0
+
+while a < A:
+    layer = []
+    b = 0
+
+    while b < B:
+        parts = input().split()
+        row = []
+        c = 0
+
+        while c < C:
+            row.append(int(parts[c]))
+            c += 1
+
+        layer.append(row)
+        b += 1
+
+    cube.append(layer)
+    a += 1
+
+total = 0
+a = 0
+
+while a < len(cube):
+    b = 0
+
+    while b < len(cube[a]):
+        c = 0
+
+        while c < len(cube[a][b]):
+            total += cube[a][b][c]
+            c += 1
+
+        b += 1
+
+    a += 1
+
+print(total)
+
+Output:
+36
+
+Explanation:
+Input read karte waqt three levels build hote hain: layer, row, cell.
+Sum nikalte waqt bhi three nested while loops chahiye.
+Har inner counter ko uske parent loop ke andar reset karna hai.
+
+============================================================
+PART 5 — DICTIONARIES
+============================================================
+
+B12 — SCOREBOARD LOOKUP
+
+
+Code example:
+d = {}
+d["alice"] = 90
+d["bob"] = 85
+
+print(d["alice"])
+
+Output:
+90
+
+d = {} empty dictionary banata hai.
+d["alice"] = 90 Alice ka score store karta hai.
+d["alice"] Alice ka score retrieve karta hai.
+Same key ko dobara assign karoge toh old value replace ho jaayegi.
+
+WORKSHEET INPUT:
+3
+alice 90
+bob 85
+cara 93
+2
+bob
+cara
+
+Expected output:
+bob 85
+cara 93
+cara 93
+
+COMPLETE CODE:
+n = int(input())
+
+d = {}
+best_name = ""
+best_score = None
+
+i = 0
+while i < n:
+    parts = input().split()
+
+    name = parts[0]
+    score = int(parts[1])
+
+    d[name] = score
+
+    if best_score is None or score > best_score:
+        best_score = score
+        best_name = name
+
+    i += 1
+
+q = int(input())
+
+i = 0
+while i < q:
+    key = input()
+    print(key, d[key])
+    i += 1
+
+print(best_name, best_score)
+
+EXPLANATION:
+Pehle n students read karte hain.
+Har line mein name aur score hai.
+d[name] = score se dictionary mein pair store karte hain.
+Har score ko best_score se compare karte hain.
+Agar score zyada hai, best_name aur best_score update karte hain.
+Uske baad q queries read karte hain aur d[key] se direct lookup karte hain.
+End mein top scorer print karte hain.
+
+============================================================
+WORKSHEET CODING QUESTIONS — QUICK SOLUTIONS
+============================================================
+
+B1 — SUM OF N NUMBERS
+
+n = int(input())
+total = 0
+i = 0
+
+while i < n:
+    x = int(input())
+    total += x
+    i += 1
+
+print(total)
+
+Sample input:
+5
+10
+20
+30
+40
+50
+
+Output:
+150
+
+B2 — MAXIMUM AND MINIMUM
+
+parts = input().split()
+
+i = 0
+biggest = int(parts[0])
+smallest = int(parts[0])
+
+while i < len(parts):
+    x = int(parts[i])
+
+    if x > biggest:
+        biggest = x
+
+    if x < smallest:
+        smallest = x
+
+    i += 1
+
+print(biggest, smallest)
+
+Sample input:
+3 8 1 9 4
+
+Output:
+9 1
+
+B3 — COUNT ABOVE AVERAGE
+
+n = int(input())
+parts = input().split()
+
+arr = []
+total = 0
+i = 0
+
+while i < n:
+    x = int(parts[i])
+    arr.append(x)
+    total += x
+    i += 1
+
+avg = total / n
+
+count = 0
+i = 0
+
+while i < n:
+    if arr[i] > avg:
+        count += 1
+    i += 1
+
+print(count)
+
+Sample input:
+5
+3 8 1 9 4
+
+Output:
+2
+
+B4 — MATRIX TOTAL
+
+R, C same line par hain, isliye input read karne ka tareeka:
+dims = input().split()
+R = int(dims[0])
+C = int(dims[1])
+
+m = []
+i = 0
+while i < R:
+    parts = input().split()
+    row = []
+    j = 0
+
+    while j < C:
+        row.append(int(parts[j]))
+        j += 1
+
+    m.append(row)
+    i += 1
+
+total = 0
+i = 0
+while i < R:
+    j = 0
+    while j < C:
+        total += m[i][j]
+        j += 1
+    i += 1
+
+print(total)
+
+B5 — ROW SUMS AND COLUMN SUMS
+
+# Assume matrix m, R rows and C columns already read.
+
+i = 0
+while i < R:
+    s = 0
+    j = 0
+
+    while j < C:
+        s += m[i][j]
+        j += 1
+
+    print(s, end=" ")
+    i += 1
+
+print()
+
+j = 0
+while j < C:
+    s = 0
+    i = 0
+
+    while i < R:
+        s += m[i][j]
+        i += 1
+
+    print(s, end=" ")
+    j += 1
+
+print()
+
+B6 — DIAGONAL SUMS
+
+# Assume square matrix m of size N x N is already read.
+
+i = 0
+main = 0
+anti = 0
+
+while i < N:
+    main += m[i][i]
+    anti += m[i][N - 1 - i]
+    i += 1
+
+print(main, anti)
+
+B7 — TRANSPOSE
+
+# Assume matrix m, R rows and C columns already read.
+
+t = []
+j = 0
+
+while j < C:
+    row = []
+    i = 0
+
+    while i < R:
+        row.append(m[i][j])
+        i += 1
+
+    t.append(row)
+    j += 1
+
+i = 0
+while i < len(t):
+    j = 0
+    while j < len(t[i]):
+        print(t[i][j], end=" ")
+        j += 1
+    print()
+    i += 1
+
+B8 — DIAGONAL TRAVERSAL
+
+# Assume matrix m, R rows and C columns already read.
+
+d = 0
+while d <= R + C - 2:
+    i = 0
+
+    while i < R:
+        j = d - i
+
+        if 0 <= j < C:
+            print(m[i][j], end=" ")
+
+        i += 1
+
+    d += 1
+
+B9 — DIAGONAL ZIGZAG
+
+# Assume matrix m, R rows and C columns already read.
+
+d = 0
+while d <= R + C - 2:
+    if d % 2 == 0:
+        i = d if d < R else R - 1
+
+        while i >= 0:
+            j = d - i
+            if 0 <= j < C:
+                print(m[i][j], end=" ")
+            i -= 1
+
+    else:
+        i = 0 if d <= C - 1 else d - (C - 1)
+
+        while i < R:
+            j = d - i
+            if 0 <= j < C:
+                print(m[i][j], end=" ")
+            i += 1
+
+    d += 1
+
+B10 — SPIRAL PRINT
+
+# Assume matrix m, R rows and C columns already read.
+
+top = 0
+bottom = R - 1
+left = 0
+right = C - 1
+
+while top <= bottom and left <= right:
+    j = left
+    while j <= right:
+        print(m[top][j], end=" ")
+        j += 1
+    top += 1
+
+    i = top
+    while i <= bottom:
+        print(m[i][right], end=" ")
+        i += 1
+    right -= 1
+
+    if top <= bottom:
+        j = right
+        while j >= left:
+            print(m[bottom][j], end=" ")
+            j -= 1
+        bottom -= 1
+
+    if left <= right:
+        i = bottom
+        while i >= top:
+            print(m[i][left], end=" ")
+            i -= 1
+    left += 1
+
+B11 — CUBE SUM
+
+# Input format: A B C, then A blocks, each containing B rows of C integers.
+
+dims = input().split()
+A = int(dims[0])
+B = int(dims[1])
+C = int(dims[2])
+
+cube = []
+a = 0
+
+while a < A:
+    layer = []
+    b = 0
+
+    while b < B:
+        parts = input().split()
+        row = []
+        c = 0
+
+        while c < C:
+            row.append(int(parts[c]))
+            c += 1
+
+        layer.append(row)
+        b += 1
+
+    cube.append(layer)
+    a += 1
+
+total = 0
+a = 0
+while a < A:
+    b = 0
+    while b < B:
+        c = 0
+        while c < C:
+            total += cube[a][b][c]
+            c += 1
+        b += 1
+    a += 1
+
+print(total)
+
+B12 — SCOREBOARD LOOKUP
+
+n = int(input())
+d = {}
+best_name = ""
+best_score = None
+
+i = 0
+while i < n:
+    parts = input().split()
+    name = parts[0]
+    score = int(parts[1])
+
+    d[name] = score
+
+    if best_score is None or score > best_score:
+        best_score = score
+        best_name = name
+
+    i += 1
+
+q = int(input())
+i = 0
+
+while i < q:
+    key = input()
+    print(key, d[key])
+    i += 1
+
+print(best_name, best_score)
+
+
+============================================================
+B9 — DIAGONAL ZIGZAG TRAVERSAL
+============================================================
+
+1. DIAGONAL ZIGZAG TRAVERSAL KA MEANING
+------------------------------------------------------------
+
+Diagonal Zigzag Traversal mein hum same anti-diagonals use karte hain jo normal diagonal traversal mein use hoti hain.
+
+Difference sirf direction ka hota hai.
+
+Har alternate diagonal ki traversal direction reverse hoti hai.
+
+Matrix:
+
+1 2 3
+4 5 6
+7 8 9
+
+
+Normal Diagonal Traversal:
+
+1 2 4 3 5 7 6 8 9
+
+
+Diagonal Zigzag Traversal:
+
+1 2 4 7 5 3 6 8 9
+
+
+------------------------------------------------------------
+2. DIAGONAL GROUPS
+------------------------------------------------------------
+
+Anti-diagonal identify karne ka rule hai:
+
+d = i + j
+
+Jin cells ka i + j same hota hai, woh same anti-diagonal mein aate hain.
+
+
+Matrix:
+
+          Column
+          0   1   2
+
+Row 0     1   2   3
+Row 1     4   5   6
+Row 2     7   8   9
+
+
+Diagonal Groups:
+
+d = 0:
+1
+
+d = 1:
+2 4
+
+d = 2:
+3 5 7
+
+d = 3:
+6 8
+
+d = 4:
+9
+
+
+Zigzag Traversal mein order:
+
+d = 0 → 1
+d = 1 → 2 4
+d = 2 → 7 5 3
+d = 3 → 6 8
+d = 4 → 9
+
+
+Final Output:
+
+1 2 4 7 5 3 6 8 9
+
+
+------------------------------------------------------------
+3. ZIGZAG DIRECTION KA LOGIC
+------------------------------------------------------------
+
+Direction decide karne ke liye check karte hain:
+
+if d % 2 == 0:
+
+% operator remainder deta hai.
+
+Agar d even hai:
+
+d = 0, 2, 4 ...
+
+Toh traversal ek direction mein hogi.
+
+Agar d odd hai:
+
+d = 1, 3, 5 ...
+
+Toh traversal opposite direction mein hogi.
+
+
+Is code mein:
+
+Even diagonal → Bottom se Top
+
+Odd diagonal → Top se Bottom
+
+
+------------------------------------------------------------
+4. COLUMN INDEX KA FORMULA
+------------------------------------------------------------
+
+Diagonal ka rule hai:
+
+d = i + j
+
+Column index j nikalne ke liye:
+
+j = d - i
+
+
+Example:
+
+Agar d = 2 hai:
+
+i = 0 → j = 2 → m[0][2] = 3
+i = 1 → j = 1 → m[1][1] = 5
+i = 2 → j = 0 → m[2][0] = 7
+
+
+d = 2 diagonal ke elements hain:
+
+3 5 7
+
+
+Direction ke according ye print ho sakte hain:
+
+3 5 7
+
+Ya reverse direction mein:
+
+7 5 3
+
+
+------------------------------------------------------------
+5. EVEN DIAGONAL TRAVERSAL
+------------------------------------------------------------
+
+Code:
+
+if d % 2 == 0:
+     i = R-1
+
+
+    while i >= 0:
+
+        j = d - i
+
+        if 0 <= j < C:
+            print(m[i][j], end=" ")
+
+        i -= 1
+
+
+Yahan:
+
+i -= 1
+
+Matlab row index decrease ho raha hai.
+
+Isliye traversal bottom se top ki taraf hoti hai.
+
+
+Example: d = 2
+
+i = 2 → j = 0 → m[2][0] = 7
+i = 1 → j = 1 → m[1][1] = 5
+i = 0 → j = 2 → m[0][2] = 3
+
+
+Output:
+
+7 5 3
+
+
+------------------------------------------------------------
+6. ODD DIAGONAL TRAVERSAL
+------------------------------------------------------------
+
+Code:
+
+else:
+
+    i = 0 
+
+    while i < R:
+
+        j = d - i
+
+        if 0 <= j < C:
+            print(m[i][j], end=" ")
+
+        i += 1
+
+
+Yahan:
+
+i += 1
+
+Matlab row index increase ho raha hai.
+
+Isliye traversal top se bottom ki taraf hoti hai.
+
+
+Example: d = 1
+
+i = 0 → j = 1 → m[0][1] = 2
+i = 1 → j = 0 → m[1][0] = 4
+
+
+Output:
+
+2 4
+
+
+
+
+
+
+------------------------------------------------------------
+IMPORTANT: STARTING VALUE OF i
+------------------------------------------------------------
+
+Even aur odd diagonal mein starting value of i alag hoti hai, kyunki humein hamesha diagonal ke ek valid cell se traversal start karna hota hai.
+
+
+1. EVEN DIAGONAL
+------------------------------------------------------------
+
+Code:
+
+i = d if d < R else R - 1
+
+
+Iska simple meaning:
+
+Agar diagonal number d valid row index ke andar hai, toh i = d se start karo.
+
+Otherwise, last valid row R - 1 se start karo.
+
+
+Example: 3 x 3 Matrix
+
+Valid row indices:
+
+0, 1, 2
+
+
+Agar:
+
+d = 2
+
+2 < R (3)
+
+Isliye:
+
+i = 2
+
+
+Lekin agar:
+
+d = 4
+
+4 < 3 → False
+
+i = 4 invalid row index hoga.
+
+Isliye:
+
+i = R - 1 = 2
+
+
+SHORT RULE:
+
+Even diagonal mein bottom-most valid row se start karna hai.
+
+Phir:
+
+i -= 1
+
+karke bottom se top move karte hain.
+
+
+------------------------------------------------------------
+2. ODD DIAGONAL
+------------------------------------------------------------
+
+Code:
+
+i = 0 if d <= C - 1 else d - (C - 1)
+
+
+Iska simple meaning:
+
+Agar diagonal top row se start kar sakti hai, toh i = 0 se start karo.
+
+Otherwise, itni rows neeche se start karo jahan column index valid ho.
+
+
+Example: 3 x 3 Matrix
+
+Valid column indices:
+
+0, 1, 2
+
+
+Agar:
+
+d = 1
+
+d <= C - 1
+
+1 <= 2 → True
+
+Isliye:
+
+i = 0
+
+
+Lekin agar:
+
+d = 3
+
+Top row se start karne par:
+
+i = 0
+
+j = d - i
+
+j = 3 - 0 = 3
+
+
+Lekin column 3 invalid hai.
+
+Isliye:
+
+i = d - (C - 1)
+
+i = 3 - 2
+
+i = 1
+
+
+Ab:
+
+j = d - i
+
+j = 3 - 1 = 2
+
+Column index valid hai.
+
+
+SHORT RULE:
+
+Odd diagonal mein top-most valid row se start karna hai.
+
+Phir:
+
+i += 1
+
+karke top se bottom move karte hain.
+
+
+------------------------------------------------------------
+QUICK SUMMARY
+------------------------------------------------------------
+
+EVEN DIAGONAL:
+
+i = d if d < R else R - 1
+
+Start from:
+
+Bottom-most valid cell
+
+Direction:
+
+Bottom → Top
+
+Movement:
+
+i -= 1
+
+
+ODD DIAGONAL:
+
+i = 0 if d <= C - 1 else d - (C - 1)
+
+Start from:
+
+Top-most valid cell
+
+Direction:
+
+Top → Bottom
+
+Movement:
+
+i += 1
+
+
+MAIN IDEA:
+
+Dono conditions ka purpose sirf itna hai:
+
+"Traversal ko hamesha diagonal ke ek valid starting cell se start karna hai."
+
+Uske baad i ko increase ya decrease karke diagonal ke baaki elements traverse kiye jaate hain.
+
+------------------------------------------------------------
+7. COMPLETE CODE
+------------------------------------------------------------
+
+m = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+
+R = len(m)
+C = len(m[0])
+
+d = 0
+
+while d <= R + C - 2:
+
+    if d % 2 == 0:
+
+        i = d if d < R else R - 1
+
+        while i >= 0:
+
+            j = d - i
+
+            if 0 <= j < C:
+                print(m[i][j], end=" ")
+
+            i -= 1
+
+    else:
+
+        i = 0 if d <= C - 1 else d - (C - 1)
+
+        while i < R:
+
+            j = d - i
+
+            if 0 <= j < C:
+                print(m[i][j], end=" ")
+
+            i += 1
+
+    d += 1
+
+
+OUTPUT:
+
+1 2 4 7 5 3 6 8 9
+
+
+============================================================
+B10 — SPIRAL TRAVERSAL
+============================================================
+
+1. SPIRAL TRAVERSAL KA MEANING
+------------------------------------------------------------
+
+Spiral Traversal mein matrix ke outer layer se start karke dheere-dheere andar ki taraf move karte hain.
+
+Traversal clockwise direction mein hoti hai.
+
+
+Matrix:
+
+1 2 3
+4 5 6
+7 8 9
+
+
+Traversal order:
+
+Top Row:
+1 2 3
+
+Right Column:
+6 9
+
+Bottom Row:
+8 7
+
+Left Column:
+4
+
+Remaining element:
+5
+
+
+Final Output:
+
+1 2 3 6 9 8 7 4 5
+
+
+------------------------------------------------------------
+2. SPIRAL TRAVERSAL KI 4 BOUNDARIES
+------------------------------------------------------------
+
+Spiral Traversal mein 4 boundaries maintain karte hain:
+
+top = 0
+bottom = R - 1
+left = 0
+right = C - 1
+
+
+Inka meaning:
+
+top = Current top row
+
+bottom = Current bottom row
+
+left = Current left column
+
+right = Current right column
+
+
+Har side complete hone ke baad corresponding boundary ko andar move karte hain.
+
+
+3 x 3 matrix ke liye:
+
+top = 0
+bottom = 2
+left = 0
+right = 2
+
+
+------------------------------------------------------------
+3. SPIRAL TRAVERSAL KA ORDER
+------------------------------------------------------------
+
+Har layer mein traversal ka order hota hai:
+
+1. Top Row → Left se Right
+
+2. Right Column → Top se Bottom
+
+3. Bottom Row → Right se Left
+
+4. Left Column → Bottom se Top
+
+
+Har complete round ke baad boundaries andar move hoti hain.
+
+
+------------------------------------------------------------
+4. MAIN LOOP
+------------------------------------------------------------
+
+while top <= bottom and left <= right:
+
+Jab tak valid rows aur columns available hain, traversal continue hogi.
+
+Agar:
+
+top > bottom
+
+Matlab valid row nahi bachi.
+
+Agar:
+
+left > right
+
+Matlab valid column nahi bacha.
+
+
+------------------------------------------------------------
+5. STEP 1 — TOP ROW
+------------------------------------------------------------
+
+Code:
+
+j = left
+
+while j <= right:
+    print(m[top][j], end=" ")
+    j += 1
+
+top += 1
+
+
+Current top row ko left se right print kiya jaata hai.
+
+
+Initial values:
+
+top = 0
+left = 0
+right = 2
+
+
+Elements:
+
+m[0][0] = 1
+m[0][1] = 2
+m[0][2] = 3
+
+
+Output:
+
+1 2 3
+
+
+Top row complete hone ke baad:
+
+top += 1
+
+Ab:
+
+top = 1
+
+
+------------------------------------------------------------
+6. STEP 2 — RIGHT COLUMN
+------------------------------------------------------------
+
+Code:
+
+i = top
+
+while i <= bottom:
+    print(m[i][right], end=" ")
+    i += 1
+
+right -= 1
+
+
+Current right column ko top se bottom print kiya jaata hai.
+
+
+Current boundaries:
+
+top = 1
+bottom = 2
+right = 2
+
+
+Elements:
+
+m[1][2] = 6
+m[2][2] = 9
+
+
+Output so far:
+
+1 2 3 6 9
+
+
+Right column complete hone ke baad:
+
+right -= 1
+
+Ab:
+
+right = 1
+
+
+------------------------------------------------------------
+7. STEP 3 — BOTTOM ROW
+------------------------------------------------------------
+
+Code:
+
+if top <= bottom:
+
+    j = right
+
+    while j >= left:
+        print(m[bottom][j], end=" ")
+        j -= 1
+
+    bottom -= 1
+
+
+Bottom row ko right se left traverse kiya jaata hai.
+
+
+Current boundaries:
+
+bottom = 2
+right = 1
+left = 0
+
+
+Elements:
+
+m[2][1] = 8
+m[2][0] = 7
+
+
+Output so far:
+
+1 2 3 6 9 8 7
+
+
+Bottom row complete hone ke baad:
+
+bottom -= 1
+
+Ab:
+
+bottom = 1
+
+
+------------------------------------------------------------
+8. STEP 4 — LEFT COLUMN
+------------------------------------------------------------
+
+Code:
+
+if left <= right:
+
+    i = bottom
+
+    while i >= top:
+        print(m[i][left], end=" ")
+        i -= 1
+
+    left += 1
+
+
+Left column ko bottom se top traverse kiya jaata hai.
+
+
+Current boundaries:
+
+left = 0
+top = 1
+bottom = 1
+
+
+Element:
+
+m[1][0] = 4
+
+
+Output so far:
+
+1 2 3 6 9 8 7 4
+
+
+Left column complete hone ke baad:
+
+left += 1
+
+Ab:
+
+left = 1
+
+
+------------------------------------------------------------
+9. NEXT ROUND
+------------------------------------------------------------
+
+Current boundaries:
+
+top = 1
+bottom = 1
+left = 1
+right = 1
+
+
+Ab sirf ek element bacha hai:
+
+m[1][1] = 5
+
+
+Final Output:
+
+1 2 3 6 9 8 7 4 5
+
+
+------------------------------------------------------------
+10. IF CONDITIONS KYUN IMPORTANT HAIN?
+------------------------------------------------------------
+
+Code mein do important conditions hain:
+
+if top <= bottom:
+
+Aur:
+
+if left <= right:
+
+
+Traversal ke end mein kabhi sirf ek row ya ek column bach sakta hai.
+
+Agar conditions use nahi karenge, toh already visited elements dobara print ho sakte hain.
+
+Isliye har boundary update ke baad check kiya jaata hai ki valid row ya column abhi bhi available hai ya nahi.
+
+
+------------------------------------------------------------
+11. COMPLETE CODE
+------------------------------------------------------------
+
+m = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+
+R = len(m)
+C = len(m[0])
+
+top = 0
+bottom = R - 1
+left = 0
+right = C - 1
+
+while top <= bottom and left <= right:
+
+    # Top Row: Left to Right
+    j = left
+
+    while j <= right:
+        print(m[top][j], end=" ")
+        j += 1
+
+    top += 1
+
+
+    # Right Column: Top to Bottom
+    i = top
+
+    while i <= bottom:
+        print(m[i][right], end=" ")
+        i += 1
+
+    right -= 1
+
+
+    # Bottom Row: Right to Left
+    if top <= bottom:
+
+        j = right
+
+        while j >= left:
+            print(m[bottom][j], end=" ")
+            j -= 1
+
+        bottom -= 1
+
+
+    # Left Column: Bottom to Top
+    if left <= right:
+
+        i = bottom
+
+        while i >= top:
+            print(m[i][left], end=" ")
+            i -= 1
+
+        left += 1
+
+
+OUTPUT:
+
+1 2 3 6 9 8 7 4 5
+
+
+============================================================
+QUICK REVISION
+============================================================
+
+B9 — DIAGONAL ZIGZAG TRAVERSAL
+
+1. Anti-diagonal ka rule:
+
+d = i + j
+
+
+2. Column index nikalne ka formula:
+
+j = d - i
+
+
+3. Even aur odd diagonals ke liye direction alternate hoti hai.
+
+
+4. Even diagonal mein:
+
+i decrease hota hai.
+
+
+5. Odd diagonal mein:
+
+i increase hota hai.
+
+
+------------------------------------------------------------
+
+B10 — SPIRAL TRAVERSAL
+
+1. Four boundaries:
+
+top
+bottom
+left
+right
+
+
+2. Traversal order:
+
+Top Row → Left se Right
+
+Right Column → Top se Bottom
+
+Bottom Row → Right se Left
+
+Left Column → Bottom se Top
+
+
+3. Har side complete hone ke baad boundary andar move hoti hai.
+
+
+4. Conditions:
+
+if top <= bottom
+
+if left <= right
+
+Duplicate printing se bachati hain.
